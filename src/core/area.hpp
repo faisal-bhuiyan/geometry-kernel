@@ -3,6 +3,7 @@
 #include <span>
 #include <vector>
 
+#include "point.hpp"
 #include "predicates.hpp"
 #include "types.hpp"
 
