@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 
 #include "core/types.hpp"
+#include "test_fixtures.hpp"
 
 namespace geometry_kernel::test {
 
