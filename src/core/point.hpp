@@ -20,7 +20,6 @@ struct Point {
 };
 
 using Point2D = Point<double>;  ///< 2D point in the plane with double precision
-using Point3D = Point<double>;  ///< 3D point in space with double precision
 
 /**
  * @brief Returns true if two points are within @p kTolerance of each other in both coordinates.

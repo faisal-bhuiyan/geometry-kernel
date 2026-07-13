@@ -13,17 +13,6 @@ namespace geometry_kernel::core {
 // Triangle
 //---------------------------------------------------------------------------
 
-/**
- * @brief Signed 2D cross product: z-component of vector (b - a) x (c - a).
- *
- * @return Signed parallelogram area in the xy-plane; sign follows the right-hand rule.
- *         Equals twice the signed area of triangle (a, b, c).
- */
-template <ScalarType T>
-[[nodiscard]] inline T SignedTriangleArea2(const Point<T>& a, const Point<T>& b, const Point<T>& c) {
-    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
-}
-
 /// @brief Area of triangle (a, b, c).
 template <ScalarType T>
 [[nodiscard]] inline T TriangleArea(const Point<T>& a, const Point<T>& b, const Point<T>& c) {
