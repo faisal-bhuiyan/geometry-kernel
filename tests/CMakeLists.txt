@@ -15,6 +15,7 @@ add_executable(geometry_kernel_unit_tests
     core/test_predicates.cpp
     core/test_area.cpp
     core/test_point.cpp
+    core/test_vector.cpp
 )
 target_link_libraries(geometry_kernel_unit_tests PRIVATE GTest::gtest_main geometry_kernel)
 target_include_directories(geometry_kernel_unit_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

@@ -3,6 +3,7 @@
 #include "point.hpp"
 #include "tolerance.hpp"
 #include "types.hpp"
+#include "vector.hpp"
 
 namespace geometry_kernel::core {
 
@@ -20,7 +21,7 @@ template <ScalarType T>
 [[nodiscard]] inline T SignedTriangleArea2(
     const Point2<T>& a, const Point2<T>& b, const Point2<T>& c
 ) {
-    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+    return Cross(b - a, c - a);
 }
 
 /**

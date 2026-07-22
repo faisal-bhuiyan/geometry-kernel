@@ -8,7 +8,7 @@
 namespace geometry_kernel::core {
 
 //---------------------------------------------------------------------------
-// Type aliases and helpers
+// Point in the plane (2D)
 //---------------------------------------------------------------------------
 
 /// @brief 2D point in the plane
