@@ -17,7 +17,9 @@ namespace geometry_kernel::core {
  *         Equals twice the signed area of triangle (a, b, c).
  */
 template <ScalarType T>
-[[nodiscard]] inline T SignedTriangleArea2(const Point<T>& a, const Point<T>& b, const Point<T>& c) {
+[[nodiscard]] inline T SignedTriangleArea2(
+    const Point2<T>& a, const Point2<T>& b, const Point2<T>& c
+) {
     return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
 }
 
@@ -26,7 +28,7 @@ template <ScalarType T>
  */
 template <ScalarType T>
 [[nodiscard]] inline Orientation TriangleOrientation(
-    const Point<T>& a, const Point<T>& b, const Point<T>& c
+    const Point2<T>& a, const Point2<T>& b, const Point2<T>& c
 ) {
     const auto winding = RobustSign(SignedTriangleArea2(a, b, c));
     if (winding > 0) {
@@ -45,7 +47,7 @@ template <ScalarType T>
  */
 template <ScalarType T>
 [[nodiscard]] inline bool IsLeftTurn(
-    const Point<T>& previous, const Point<T>& current, const Point<T>& next
+    const Point2<T>& previous, const Point2<T>& current, const Point2<T>& next
 ) {
     return TriangleOrientation(previous, current, next) == Orientation::kCounterClockwise;
 }
@@ -63,7 +65,7 @@ template <ScalarType T>
  */
 template <ScalarType T>
 [[nodiscard]] inline bool PointInTriangle(
-    const Point<T>& point, const Point<T>& v1, const Point<T>& v2, const Point<T>& v3
+    const Point2<T>& point, const Point2<T>& v1, const Point2<T>& v2, const Point2<T>& v3
 ) {
     const int s1{RobustSign(SignedTriangleArea2(v1, v2, point))};
     const int s2{RobustSign(SignedTriangleArea2(v2, v3, point))};

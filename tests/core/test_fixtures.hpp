@@ -10,7 +10,7 @@ namespace geometry_kernel::test {
 using namespace geometry_kernel::core;
 
 /**
- * @brief Casts a `Point2D` (`Point<double>`) polygon to any `Point<T>` precision.
+ * @brief Casts a `Point2D` (`Point2<double>`) polygon to any `Point2<T>` precision.
  *
  * Allows the `double`-precision fixture constants (kCcwSquare, kCcwLShape, etc.)
  * to be reused in typed tests parameterised over `float`, `double`, and `long double`
@@ -21,11 +21,11 @@ using namespace geometry_kernel::core;
  * @return New polygon with every coordinate cast to `T`.
  */
 template <ScalarType T>
-[[nodiscard]] std::vector<Point<T>> CastPolygon(const std::vector<Point2D>& in) {
-    std::vector<Point<T>> out;
+[[nodiscard]] std::vector<Point2<T>> CastPolygon(const std::vector<Point2D>& in) {
+    std::vector<Point2<T>> out;
     out.reserve(in.size());
     for (const auto& p : in) {
-        out.push_back(Point<T>{static_cast<T>(p.x), static_cast<T>(p.y)});
+        out.push_back(Point2<T>{static_cast<T>(p.x), static_cast<T>(p.y)});
     }
     return out;
 }

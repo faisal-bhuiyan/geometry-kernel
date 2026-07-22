@@ -13,9 +13,9 @@ namespace geometry_kernel::core {
 // Triangle
 //---------------------------------------------------------------------------
 
-/// @brief Area of triangle (a, b, c).
+/// @brief Area of triangle (a, b, c) in the plane.
 template <ScalarType T>
-[[nodiscard]] inline T TriangleArea(const Point<T>& a, const Point<T>& b, const Point<T>& c) {
+[[nodiscard]] inline T TriangleArea(const Point2<T>& a, const Point2<T>& b, const Point2<T>& c) {
     return static_cast<T>(0.5) * std::abs(SignedTriangleArea2(a, b, c));
 }
 
@@ -37,7 +37,7 @@ template <ScalarType T>
  * @see https://en.wikipedia.org/wiki/Shoelace_formula
  */
 template <ScalarType T>
-[[nodiscard]] inline T SignedPolygonArea(std::span<const Point<T>> polygon) {
+[[nodiscard]] inline T SignedPolygonArea(std::span<const Point2<T>> polygon) {
     // Degenerate case: less than 3 vertices -> area is zero
     if (polygon.size() < 3U) {
         return T{};  // zero area
@@ -54,22 +54,22 @@ template <ScalarType T>
     return static_cast<T>(0.5) * sum;
 }
 
-/// @brief Convenience overload for SignedPolygonArea -> accepts `std::vector<Point<T>>` directly
+/// @brief Convenience overload for SignedPolygonArea -> accepts `std::vector<Point2<T>>` directly
 template <ScalarType T>
-[[nodiscard]] inline T SignedPolygonArea(const std::vector<Point<T>>& polygon) {
-    return SignedPolygonArea(std::span<const Point<T>>{polygon});
+[[nodiscard]] inline T SignedPolygonArea(const std::vector<Point2<T>>& polygon) {
+    return SignedPolygonArea(std::span<const Point2<T>>{polygon});
 }
 
 /// @brief Area of a polygon.
 template <ScalarType T>
-[[nodiscard]] inline T PolygonArea(std::span<const Point<T>> polygon) {
+[[nodiscard]] inline T PolygonArea(std::span<const Point2<T>> polygon) {
     return std::abs(SignedPolygonArea(polygon));
 }
 
-/// @brief Convenience overload for PolygonArea -> accepts `std::vector<Point<T>>` directly
+/// @brief Convenience overload for PolygonArea -> accepts `std::vector<Point2<T>>` directly
 template <ScalarType T>
-[[nodiscard]] inline T PolygonArea(const std::vector<Point<T>>& polygon) {
-    return PolygonArea(std::span<const Point<T>>{polygon});
+[[nodiscard]] inline T PolygonArea(const std::vector<Point2<T>>& polygon) {
+    return PolygonArea(std::span<const Point2<T>>{polygon});
 }
 
 }  // namespace geometry_kernel::core

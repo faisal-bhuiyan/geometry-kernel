@@ -10,11 +10,10 @@ namespace geometry_kernel::test {
 using namespace geometry_kernel::core;
 
 //------------------------------------------------------------------------------
-// Concept correctness (compile-time)
+// Concept correctness (compile-time assertions)
 //------------------------------------------------------------------------------
 //
-// These static_asserts compile (or fail at compile-time) — no runtime TEST body needed.
-// They guard the ScalarType concept definition in geometry.hpp.
+// These static_asserts compile (or fail at compile-time) — no runtime TEST body needed
 
 // Admitted types
 static_assert(ScalarType<float>);
