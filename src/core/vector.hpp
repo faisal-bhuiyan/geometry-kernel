@@ -183,9 +183,4 @@ template <ScalarType T>
     return v * s;
 }
 
-/**
- * @brief Deliberately no operator+(Point2, Point2) — "adding two positions" has no
- * geometric meaning, so it's not provided rather than silently allowed.
- */
-
 }  // namespace geometry_kernel::core
