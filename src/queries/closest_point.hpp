@@ -192,7 +192,7 @@ template <ScalarType T>
  *       /______\
  *     v1        v2
  *
- * Case 2: point outside, closest to an edge interior
+ * Case 2: point outside -> closest to an edge interior
  *
  *          v3
  *          /\
@@ -205,7 +205,7 @@ template <ScalarType T>
  *           v
  *        closest = interior point on edge v1-v2 (not a vertex)
  *
- * Case 3: point outside, closest to a shared vertex
+ * Case 3: point outside -> closest to a shared vertex
  *
  *          v3
  *          /\
@@ -223,7 +223,8 @@ template <ScalarType T>
  * @param v3 Third vertex of the triangle.
  * @return Closest point on the triangle (interior or boundary) to @p point.
  *
- * @note Winding-order agnostic, since PointInTriangle and ClosestPointOnSegment both are.
+ * @note Winding-order agnostic since PointInTriangle and ClosestPointOnSegment both are
+ * (winding-order agnostic).
  */
 template <ScalarType T>
 [[nodiscard]] inline Point2<T> ClosestPointOnTriangle(
