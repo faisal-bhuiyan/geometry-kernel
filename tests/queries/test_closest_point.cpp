@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 
 #include "core/point.hpp"
+#include "core/test_fixtures.hpp"
 #include "core/tolerance.hpp"
 #include "core/vector.hpp"
 #include "queries/closest_point.hpp"
@@ -276,6 +277,242 @@ TEST(ClosestPointProperties, SegmentDistanceAtLeastLineDistance) {
         const double line_sq = LengthSquared(p - ClosestPointOnLine(p, a, b));
         EXPECT_GE(seg_sq, line_sq - 1e-12);
     }
+}
+
+//------------------------------------------------------------------------------
+// ClosestPointOnTriangle — interior / boundary
+//------------------------------------------------------------------------------
+
+TEST(ClosestPointOnTriangle, InteriorPointReturnsItself) {
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D centroid{1. / 3., 1. / 3.};
+    const Point2D q = ClosestPointOnTriangle(centroid, v1, v2, v3);
+    EXPECT_DOUBLE_EQ(q.x, centroid.x);
+    EXPECT_DOUBLE_EQ(q.y, centroid.y);
+}
+
+TEST(ClosestPointOnTriangle, EdgeMidpointReturnsItself) {
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D mid{0.5, 0.};  // midpoint of edge v1-v2
+    const Point2D q = ClosestPointOnTriangle(mid, v1, v2, v3);
+    EXPECT_DOUBLE_EQ(q.x, mid.x);
+    EXPECT_DOUBLE_EQ(q.y, mid.y);
+}
+
+TEST(ClosestPointOnTriangle, VertexReturnsItself) {
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D q = ClosestPointOnTriangle(v2, v1, v2, v3);
+    EXPECT_DOUBLE_EQ(q.x, v2.x);
+    EXPECT_DOUBLE_EQ(q.y, v2.y);
+}
+
+//------------------------------------------------------------------------------
+// ClosestPointOnTriangle — exterior edge-interior regions (one per branch)
+//------------------------------------------------------------------------------
+
+TEST(ClosestPointOnTriangle, OutsideNearEdgeV1V2) {
+    // Unit right triangle; point below base edge v1-v2
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D p{0.5, -1.};
+    const Point2D q = ClosestPointOnTriangle(p, v1, v2, v3);
+    const Point2D expected = ClosestPointOnSegment(p, v1, v2);
+    EXPECT_DOUBLE_EQ(q.x, expected.x);
+    EXPECT_DOUBLE_EQ(q.y, expected.y);
+}
+
+TEST(ClosestPointOnTriangle, OutsideNearEdgeV2V3) {
+    // Point outside near the hypotenuse v2(1,0)-v3(0,1); midpoint is (0.5,0.5)
+    // Direction along edge is (-1,1); outward normal (toward exterior) is (1,1)/sqrt(2)
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D p{1., 1.};  // outside, past the hypotenuse
+    const Point2D q = ClosestPointOnTriangle(p, v1, v2, v3);
+    const Point2D expected = ClosestPointOnSegment(p, v2, v3);
+    EXPECT_DOUBLE_EQ(q.x, expected.x);
+    EXPECT_DOUBLE_EQ(q.y, expected.y);
+}
+
+TEST(ClosestPointOnTriangle, OutsideNearEdgeV3V1) {
+    // Point left of vertical-ish edge v3(0,1)-v1(0,0) which is the y-axis segment
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D p{-1., 0.5};
+    const Point2D q = ClosestPointOnTriangle(p, v1, v2, v3);
+    const Point2D expected = ClosestPointOnSegment(p, v3, v1);
+    EXPECT_DOUBLE_EQ(q.x, expected.x);
+    EXPECT_DOUBLE_EQ(q.y, expected.y);
+}
+
+//------------------------------------------------------------------------------
+// ClosestPointOnTriangle — exterior vertex regions
+//------------------------------------------------------------------------------
+
+TEST(ClosestPointOnTriangle, OutsideNearestToV1) {
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D p{-1., -1.};
+    const Point2D q = ClosestPointOnTriangle(p, v1, v2, v3);
+    EXPECT_DOUBLE_EQ(q.x, v1.x);
+    EXPECT_DOUBLE_EQ(q.y, v1.y);
+}
+
+TEST(ClosestPointOnTriangle, OutsideNearestToV2) {
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D p{2., -1.};
+    const Point2D q = ClosestPointOnTriangle(p, v1, v2, v3);
+    EXPECT_DOUBLE_EQ(q.x, v2.x);
+    EXPECT_DOUBLE_EQ(q.y, v2.y);
+}
+
+TEST(ClosestPointOnTriangle, OutsideNearestToV3) {
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D p{-1., 2.};
+    const Point2D q = ClosestPointOnTriangle(p, v1, v2, v3);
+    EXPECT_DOUBLE_EQ(q.x, v3.x);
+    EXPECT_DOUBLE_EQ(q.y, v3.y);
+}
+
+//------------------------------------------------------------------------------
+// ClosestPointOnTriangle — degenerate triangles
+//------------------------------------------------------------------------------
+
+TEST(ClosestPointOnTriangle, DegenerateAllCoincident_ReturnsQueryPoint) {
+    // Known limitation inherited from PointInTriangle: when all vertices coincide,
+    // PointInTriangle always returns true, so ClosestPointOnTriangle early-returns
+    // the query point itself (implying zero distance to a single coincident point).
+    const Point2D v{0., 0.};
+    const Point2D p{1., 0.};
+    const Point2D q = ClosestPointOnTriangle(p, v, v, v);
+    EXPECT_DOUBLE_EQ(q.x, p.x);
+    EXPECT_DOUBLE_EQ(q.y, p.y);
+}
+
+TEST(ClosestPointOnTriangle, DegenerateCollinearVertices) {
+    // Three distinct collinear points; no crash/NaN, result lies on the line
+    const Point2D v1{0., 0.}, v2{2., 0.}, v3{4., 0.};
+    const Point2D p{2., 3.};
+    const Point2D q = ClosestPointOnTriangle(p, v1, v2, v3);
+    EXPECT_NEAR(q.y, 0., 1e-12);  // on the x-axis
+    EXPECT_GE(q.x, 0. - 1e-12);
+    EXPECT_LE(q.x, 4. + 1e-12);
+    // Closest should be the foot onto the middle of the span
+    EXPECT_NEAR(q.x, 2., 1e-12);
+}
+
+//------------------------------------------------------------------------------
+// ClosestPointOnTriangle — winding-order agnosticism
+//------------------------------------------------------------------------------
+
+TEST(ClosestPointOnTriangle, SameResultForCCWAndCW_Interior) {
+    const Point2D centroid{1. / 3., 1. / 3.};
+    const Point2D q_ccw =
+        ClosestPointOnTriangle(centroid, kCcwTriangle[0], kCcwTriangle[1], kCcwTriangle[2]);
+    const Point2D q_cw =
+        ClosestPointOnTriangle(centroid, kCwTriangle[0], kCwTriangle[1], kCwTriangle[2]);
+    EXPECT_DOUBLE_EQ(q_ccw.x, q_cw.x);
+    EXPECT_DOUBLE_EQ(q_ccw.y, q_cw.y);
+}
+
+TEST(ClosestPointOnTriangle, SameResultForCCWAndCW_Exterior) {
+    const Point2D p{0.5, -1.};
+    const Point2D q_ccw =
+        ClosestPointOnTriangle(p, kCcwTriangle[0], kCcwTriangle[1], kCcwTriangle[2]);
+    const Point2D q_cw = ClosestPointOnTriangle(p, kCwTriangle[0], kCwTriangle[1], kCwTriangle[2]);
+    EXPECT_DOUBLE_EQ(q_ccw.x, q_cw.x);
+    EXPECT_DOUBLE_EQ(q_ccw.y, q_cw.y);
+}
+
+//------------------------------------------------------------------------------
+// PointToTriangleDistance
+//------------------------------------------------------------------------------
+
+TEST(PointToTriangleDistance, InteriorIsZero) {
+    const Point2D centroid{1. / 3., 1. / 3.};
+    EXPECT_DOUBLE_EQ(
+        PointToTriangleDistance(centroid, kCcwTriangle[0], kCcwTriangle[1], kCcwTriangle[2]), 0.
+    );
+}
+
+TEST(PointToTriangleDistance, DefinedViaClosestPoint) {
+    const Point2D p{2., 2.};
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    EXPECT_DOUBLE_EQ(
+        PointToTriangleDistance(p, v1, v2, v3), Length(p - ClosestPointOnTriangle(p, v1, v2, v3))
+    );
+}
+
+TEST(PointToTriangleDistance, KnownNumericCase) {
+    // Right triangle (0,0)-(4,0)-(0,3); point (2,-3) is 3 units below the base
+    const Point2D v1{0., 0.}, v2{4., 0.}, v3{0., 3.};
+    const Point2D p{2., -3.};
+    EXPECT_DOUBLE_EQ(PointToTriangleDistance(p, v1, v2, v3), 3.);
+}
+
+TEST(PointToTriangleDistance, NeverNegative) {
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    EXPECT_GE(PointToTriangleDistance(Point2D{0.25, 0.25}, v1, v2, v3), 0.);
+    EXPECT_GE(PointToTriangleDistance(Point2D{-1., -1.}, v1, v2, v3), 0.);
+    EXPECT_GE(PointToTriangleDistance(Point2D{5., 5.}, v1, v2, v3), 0.);
+}
+
+TEST(PointToTriangleDistance, AtMostDistanceToAnyEdge) {
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D p{2., 2.};
+    const double d = PointToTriangleDistance(p, v1, v2, v3);
+    EXPECT_LE(d, PointToSegmentDistance(p, v1, v2) + 1e-12);
+    EXPECT_LE(d, PointToSegmentDistance(p, v2, v3) + 1e-12);
+    EXPECT_LE(d, PointToSegmentDistance(p, v3, v1) + 1e-12);
+}
+
+//------------------------------------------------------------------------------
+// ClosestPointOnTriangle — cross-cutting properties
+//------------------------------------------------------------------------------
+
+TEST(ClosestPointProperties, TriangleRotationInvariance) {
+    // Same triangle, cyclic vertex permutations must agree
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D p{2., -1.};
+    const Point2D q123 = ClosestPointOnTriangle(p, v1, v2, v3);
+    const Point2D q231 = ClosestPointOnTriangle(p, v2, v3, v1);
+    const Point2D q312 = ClosestPointOnTriangle(p, v3, v1, v2);
+    EXPECT_DOUBLE_EQ(q123.x, q231.x);
+    EXPECT_DOUBLE_EQ(q123.y, q231.y);
+    EXPECT_DOUBLE_EQ(q123.x, q312.x);
+    EXPECT_DOUBLE_EQ(q123.y, q312.y);
+}
+
+TEST(ClosestPointProperties, TriangleClosestPointIsIdempotent) {
+    const Point2D& v1 = kCcwTriangle[0];
+    const Point2D& v2 = kCcwTriangle[1];
+    const Point2D& v3 = kCcwTriangle[2];
+    const Point2D p{2., -1.};
+    const Point2D q = ClosestPointOnTriangle(p, v1, v2, v3);
+    const Point2D q2 = ClosestPointOnTriangle(q, v1, v2, v3);
+    EXPECT_DOUBLE_EQ(q2.x, q.x);
+    EXPECT_DOUBLE_EQ(q2.y, q.y);
 }
 
 }  // namespace geometry_kernel::test

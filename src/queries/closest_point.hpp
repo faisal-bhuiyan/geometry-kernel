@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "core/point.hpp"
+#include "core/predicates.hpp"
 #include "core/tolerance.hpp"
 #include "core/types.hpp"
 #include "core/vector.hpp"
@@ -156,6 +157,108 @@ template <ScalarType T>
     const Point2<T>& point, const Point2<T>& a, const Point2<T>& b
 ) {
     return std::sqrt(PointToSegmentDistanceSquared(point, a, b));
+}
+
+//---------------------------------------------------------------------------
+// Point-to-triangle queries
+//---------------------------------------------------------------------------
+
+/**
+ * @brief Closest point on the filled triangle (v1, v2, v3) to @p point.
+ *
+ * Algorithm (O(1), no per-vertex Voronoi-region logic needed):
+ *
+ * 1. A triangle is convex. If @p point lies inside or on its boundary,
+ *    the closest point in the filled region is @p point itself (distance zero).
+ * 2. Otherwise, the closest point on any convex region's boundary always lies
+ *    on one of its edges. So it suffices to project @p point onto each of the
+ *    three edges via ClosestPointOnSegment and keep whichever projection has
+ *    the smallest distance.
+ * 3. Squared distances (PointToSegmentDistanceSquared) are compared instead of
+ *    true distances to avoid three unnecessary sqrt calls -- squared distance
+ *    preserves the ordering needed to pick the minimum.
+ *
+ * Note that clamped segment projections already handle the "closest to a
+ * vertex" case correctly without extra logic: when @p point is nearest to a
+ * shared vertex (e.g. v2), both adjacent edges (v1,v2) and (v2,v3) clamp their
+ * own projection to v2, so the minimum-of-three naturally converges there.
+ *
+ * Case 1: point inside the triangle -> return point itself
+ *
+ *          v3
+ *          /\
+ *         /  \
+ *        / *  \      point (*) is inside -> closest = point
+ *       /______\
+ *     v1        v2
+ *
+ * Case 2: point outside, closest to an edge interior
+ *
+ *          v3
+ *          /\
+ *         /  \
+ *        /    \
+ *       /______\
+ *     v1        v2
+ *           *            point outside, below edge v1-v2
+ *           |
+ *           v
+ *        closest = interior point on edge v1-v2 (not a vertex)
+ *
+ * Case 3: point outside, closest to a shared vertex
+ *
+ *          v3
+ *          /\
+ *         /  \
+ *        /    \
+ *       /______\
+ *     v1        v2  *    point outside, nearest to v2
+ *
+ *   Both edge (v1,v2) and edge (v2,v3) clamp their projection to v2,
+ *   so either one yields the correct closest = v2.
+ *
+ * @param point Point to query.
+ * @param v1 First vertex of the triangle.
+ * @param v2 Second vertex of the triangle.
+ * @param v3 Third vertex of the triangle.
+ * @return Closest point on the triangle (interior or boundary) to @p point.
+ *
+ * @note Winding-order agnostic, since PointInTriangle and ClosestPointOnSegment both are.
+ */
+template <ScalarType T>
+[[nodiscard]] inline Point2<T> ClosestPointOnTriangle(
+    const Point2<T>& point, const Point2<T>& v1, const Point2<T>& v2, const Point2<T>& v3
+) {
+    // Interior (or boundary) case
+    if (PointInTriangle(point, v1, v2, v3)) {
+        return point;
+    }
+
+    // Edge v1-v2
+    Point2<T> closest{ClosestPointOnSegment(point, v1, v2)};
+    T best_distance_squared{PointToSegmentDistanceSquared(point, v1, v2)};
+
+    // Edge v2-v3
+    if (const T d23{PointToSegmentDistanceSquared(point, v2, v3)}; d23 < best_distance_squared) {
+        closest = ClosestPointOnSegment(point, v2, v3);
+        best_distance_squared = d23;
+    }
+
+    // Edge v3-v1
+    if (const T d31{PointToSegmentDistanceSquared(point, v3, v1)}; d31 < best_distance_squared) {
+        closest = ClosestPointOnSegment(point, v3, v1);
+        best_distance_squared = d31;
+    }
+
+    return closest;
+}
+
+/// @brief Distance from @p point to the filled triangle (v1, v2, v3). Zero if point is inside.
+template <ScalarType T>
+[[nodiscard]] inline T PointToTriangleDistance(
+    const Point2<T>& point, const Point2<T>& v1, const Point2<T>& v2, const Point2<T>& v3
+) {
+    return Length(point - ClosestPointOnTriangle(point, v1, v2, v3));
 }
 
 }  // namespace geometry_kernel::queries
