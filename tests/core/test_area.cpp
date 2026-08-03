@@ -3,11 +3,13 @@
 #include "core/area.hpp"
 #include "core/point.hpp"
 #include "core/predicates.hpp"
+#include "queries/containment.hpp"
 #include "test_fixtures.hpp"
 
 namespace geometry_kernel::test {
 
 using namespace geometry_kernel::core;
+using namespace geometry_kernel::queries;
 
 //------------------------------------------------------------------------------
 // triangle_area tests

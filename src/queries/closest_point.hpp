@@ -8,6 +8,7 @@
 #include "core/tolerance.hpp"
 #include "core/types.hpp"
 #include "core/vector.hpp"
+#include "queries/containment.hpp"
 
 namespace geometry_kernel::queries {
 
