@@ -53,28 +53,4 @@ template <ScalarType T>
     return TriangleOrientation(previous, current, next) == Orientation::kCounterClockwise;
 }
 
-/**
- * @brief Tests if a point lies inside or on the boundary of triangle (v1, v2, v3).
- *
- * For each directed edge of the triangle, computes which side the point falls on
- * using the signed area of the triangle formed by that edge and the point.
- * A point is inside if and only if all three signs agree (all positive, all negative,
- * or zero for boundary). Mixed signs mean the point is outside at least one edge.
- *
- * Winding-order agnostic -> works for both CCW and CW triangles.
- * Boundary-inclusive -> points exactly on an edge or vertex return true.
- */
-template <ScalarType T>
-[[nodiscard]] inline bool PointInTriangle(
-    const Point2<T>& point, const Point2<T>& v1, const Point2<T>& v2, const Point2<T>& v3
-) {
-    const int s1{RobustSign(SignedTriangleArea2(v1, v2, point))};
-    const int s2{RobustSign(SignedTriangleArea2(v2, v3, point))};
-    const int s3{RobustSign(SignedTriangleArea2(v3, v1, point))};
-
-    const bool has_negative{(s1 < 0) || (s2 < 0) || (s3 < 0)};
-    const bool has_positive{(s1 > 0) || (s2 > 0) || (s3 > 0)};
-    return !(has_negative && has_positive);
-}
-
 }  // namespace geometry_kernel::core
