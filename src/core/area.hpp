@@ -4,8 +4,8 @@
 #include <vector>
 
 #include "point.hpp"
-#include "predicates.hpp"
 #include "types.hpp"
+#include "vector.hpp"
 
 namespace geometry_kernel::core {
 
@@ -13,7 +13,20 @@ namespace geometry_kernel::core {
 // Triangle
 //---------------------------------------------------------------------------
 
-/// @brief Area of triangle (a, b, c) in the plane.
+/**
+ * @brief Signed 2D cross product: z-component of vector (b - a) x (c - a).
+ *
+ * @return Signed parallelogram area in the xy-plane; sign follows the right-hand rule.
+ *         Equals twice the signed area of triangle (a, b, c).
+ */
+template <ScalarType T>
+[[nodiscard]] inline T SignedTriangleArea2(
+    const Point2<T>& a, const Point2<T>& b, const Point2<T>& c
+) {
+    return Cross(b - a, c - a);
+}
+
+/// @brief Area of triangle (a, b, c) in the plane
 template <ScalarType T>
 [[nodiscard]] inline T TriangleArea(const Point2<T>& a, const Point2<T>& b, const Point2<T>& c) {
     return static_cast<T>(0.5) * std::abs(SignedTriangleArea2(a, b, c));
@@ -32,7 +45,7 @@ template <ScalarType T>
  * - Zero     -> polygon is degenerate (fewer than 3 vertices, or all points collinear)
  *
  * @param polygon Vertices of the polygon as an open ring (last vertex does not repeat first).
- * @return Signed area - absolute value equals the geometric area of the polygon.
+ * @return Signed area -> absolute value equals the geometric area of the polygon.
  * @note Self-intersecting polygons produce undefined results.
  * @see https://en.wikipedia.org/wiki/Shoelace_formula
  */
@@ -60,7 +73,7 @@ template <ScalarType T>
     return SignedPolygonArea(std::span<const Point2<T>>{polygon});
 }
 
-/// @brief Area of a polygon.
+/// @brief Area of a polygon
 template <ScalarType T>
 [[nodiscard]] inline T PolygonArea(std::span<const Point2<T>> polygon) {
     return std::abs(SignedPolygonArea(polygon));

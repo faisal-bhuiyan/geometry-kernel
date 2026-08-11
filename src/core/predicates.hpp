@@ -1,5 +1,6 @@
 #pragma once
 
+#include "area.hpp"
 #include "point.hpp"
 #include "tolerance.hpp"
 #include "types.hpp"
@@ -8,21 +9,8 @@
 namespace geometry_kernel::core {
 
 //---------------------------------------------------------------------------
-// Triangle predicates
+// Triangle predicates (2D)
 //---------------------------------------------------------------------------
-
-/**
- * @brief Signed 2D cross product: z-component of vector (b - a) x (c - a).
- *
- * @return Signed parallelogram area in the xy-plane; sign follows the right-hand rule.
- *         Equals twice the signed area of triangle (a, b, c).
- */
-template <ScalarType T>
-[[nodiscard]] inline T SignedTriangleArea2(
-    const Point2<T>& a, const Point2<T>& b, const Point2<T>& c
-) {
-    return Cross(b - a, c - a);
-}
 
 /**
  * @brief Orientation of ordered triple (a, b, c) in the plane.
