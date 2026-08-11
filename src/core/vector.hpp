@@ -273,43 +273,85 @@ template <ScalarType T>
 // Point / Vector algebra -> respects the affine distinction
 //---------------------------------------------------------------------------
 
-/// @brief Subtracts two points to get the vector between them: a - b.
+/**
+ * @brief Subtracts two points to get the vector between them: a - b.
+ *
+ * @param a First point.
+ * @param b Second point.
+ * @return Vector between the two points: a - b
+ */
 template <ScalarType T>
 [[nodiscard]] inline Vector3<T> operator-(const Point3<T>& a, const Point3<T>& b) {
     return Vector3<T>{a.x - b.x, a.y - b.y, a.z - b.z};
 }
 
-/// @brief Adds a vector to a point to translate the point: p + v.
+/**
+ * @brief Adds a vector to a point to translate the point: p + v.
+ *
+ * @param p Point to translate.
+ * @param v Vector to translate the point with.
+ * @return Translated point: p + v
+ */
 template <ScalarType T>
 [[nodiscard]] inline Point3<T> operator+(const Point3<T>& p, const Vector3<T>& v) {
     return Point3<T>{p.x + v.x, p.y + v.y, p.z + v.z};
 }
 
-/// @brief Adds a point to a vector to translate the point (commutative form of Point3 + Vector3).
+/**
+ * @brief Adds a point to a vector to translate the point (commutative form of Point3 + Vector3).
+ *
+ * @param v Vector to translate the point with.
+ * @param p Point to translate.
+ * @return Translated point: v + p = p + v
+ */
 template <ScalarType T>
 [[nodiscard]] inline Point3<T> operator+(const Vector3<T>& v, const Point3<T>& p) {
     return p + v;
 }
 
-/// @brief Adds two vectors to get the resulting vector: a + b.
+/**
+ * @brief Adds two vectors to get the resulting vector: a + b.
+ *
+ * @param a First vector.
+ * @param b Second vector.
+ * @return Resulting vector: a + b
+ */
 template <ScalarType T>
 [[nodiscard]] inline Vector3<T> operator+(const Vector3<T>& a, const Vector3<T>& b) {
     return Vector3<T>{a.x + b.x, a.y + b.y, a.z + b.z};
 }
 
-/// @brief Subtracts two vectors to get the resulting vector: a - b.
+/**
+ * @brief Subtracts two vectors to get the resulting vector: a - b.
+ *
+ * @param a First vector.
+ * @param b Second vector.
+ * @return Resulting vector: a - b
+ */
 template <ScalarType T>
 [[nodiscard]] inline Vector3<T> operator-(const Vector3<T>& a, const Vector3<T>& b) {
     return Vector3<T>{a.x - b.x, a.y - b.y, a.z - b.z};
 }
 
-/// @brief Multiplies a vector by a scalar: v * s.
+/**
+ * @brief Multiplies a vector by a scalar: v * s.
+ *
+ * @param v Vector to multiply.
+ * @param s Scalar to multiply the vector by.
+ * @return Resulting vector: v * s
+ */
 template <ScalarType T>
 [[nodiscard]] inline Vector3<T> operator*(const Vector3<T>& v, T s) {
     return Vector3<T>{v.x * s, v.y * s, v.z * s};
 }
 
-/// @brief Multiplies a scalar by a vector: s * v.
+/**
+ * @brief Multiplies a scalar by a vector: s * v.
+ *
+ * @param s Scalar to multiply the vector by.
+ * @param v Vector to multiply.
+ * @return Resulting vector: s * v
+ */
 template <ScalarType T>
 [[nodiscard]] inline Vector3<T> operator*(T s, const Vector3<T>& v) {
     return v * s;
