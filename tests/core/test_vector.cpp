@@ -2,9 +2,9 @@
 
 #include <gtest/gtest.h>
 
-#include "core/point.hpp"
-#include "core/predicates.hpp"
-#include "core/vector.hpp"
+#include "core/point2.hpp"
+#include "core/predicates2.hpp"
+#include "core/vector2.hpp"
 
 namespace geometry_kernel::test {
 

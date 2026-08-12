@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "core/point.hpp"
+#include "core/point2.hpp"
 #include "core/types.hpp"
 
 namespace geometry_kernel::test {

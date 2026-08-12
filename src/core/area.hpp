@@ -3,9 +3,9 @@
 #include <span>
 #include <vector>
 
-#include "point.hpp"
+#include "point2.hpp"
 #include "types.hpp"
-#include "vector.hpp"
+#include "vector2.hpp"
 
 namespace geometry_kernel::core {
 

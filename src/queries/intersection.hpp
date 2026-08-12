@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-#include "core/point.hpp"
-#include "core/predicates.hpp"
+#include "core/point2.hpp"
+#include "core/predicates2.hpp"
 #include "core/tolerance.hpp"
 #include "core/types.hpp"
 

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "area.hpp"
-#include "point.hpp"
+#include "point3.hpp"
 #include "tolerance.hpp"
 #include "types.hpp"
-#include "vector.hpp"
+#include "vector3.hpp"
 
 namespace geometry_kernel::core {
 

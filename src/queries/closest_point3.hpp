@@ -3,12 +3,12 @@
 #include <algorithm>
 #include <cmath>
 
-#include "core/point.hpp"
-#include "core/predicates.hpp"
+#include "core/point3.hpp"
+#include "core/predicates3.hpp"
 #include "core/tolerance.hpp"
 #include "core/types.hpp"
-#include "core/vector.hpp"
-#include "queries/containment.hpp"
+#include "core/vector3.hpp"
+#include "queries/containment3.hpp"
 
 namespace geometry_kernel::queries {
 

@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
 #include "core/area.hpp"
-#include "core/point.hpp"
-#include "core/predicates.hpp"
-#include "queries/containment.hpp"
+#include "core/point2.hpp"
+#include "core/predicates2.hpp"
+#include "queries/containment2.hpp"
 #include "test_fixtures.hpp"
 
 namespace geometry_kernel::test {

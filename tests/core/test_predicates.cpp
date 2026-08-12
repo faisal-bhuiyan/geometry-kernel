@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "core/predicates.hpp"
+#include "core/predicates2.hpp"
 #include "test_fixtures.hpp"
 
 namespace geometry_kernel::test {

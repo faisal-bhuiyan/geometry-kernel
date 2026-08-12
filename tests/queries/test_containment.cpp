@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "core/point.hpp"
+#include "core/point2.hpp"
 #include "core/test_fixtures.hpp"
-#include "queries/containment.hpp"
+#include "queries/containment2.hpp"
 
 namespace geometry_kernel::test {
 

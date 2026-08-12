@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "core/point.hpp"
+#include "core/point2.hpp"
 #include "core/tolerance.hpp"
 
 namespace geometry_kernel::test {

@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "point.hpp"
+#include "point3.hpp"
 #include "tolerance.hpp"
 #include "types.hpp"
 
