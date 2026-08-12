@@ -15,7 +15,7 @@ namespace geometry_kernel::queries {
 using namespace geometry_kernel::core;
 
 //---------------------------------------------------------------------------
-// Triangle containment
+// Triangle containment (2D)
 //---------------------------------------------------------------------------
 
 /**
@@ -79,7 +79,7 @@ template <ScalarType T>
 }
 
 //---------------------------------------------------------------------------
-// Polygon containment
+// Polygon containment (2D)
 //---------------------------------------------------------------------------
 
 /**
@@ -168,7 +168,7 @@ template <ScalarType T>
     return inside;
 }
 
-/// @brief Convenience overload -> accepts std::vector<Point2<T>> directly.
+/// @brief Convenience overload -> accepts std::vector<Point2<T>> directly
 template <ScalarType T>
 [[nodiscard]] inline bool PointInPolygon(
     const Point2<T>& point, const std::vector<Point2<T>>& polygon
