@@ -1,14 +1,10 @@
 #pragma once
 
-#include <cstddef>
-#include <span>
-#include <vector>
-
 #include "core/point3.hpp"
 #include "core/predicates3.hpp"
 #include "core/tolerance.hpp"
 #include "core/types.hpp"
-#include "queries/intersection3.hpp"
+#include "core/vector3.hpp"
 
 namespace geometry_kernel::queries {
 
