@@ -15,7 +15,7 @@ namespace geometry_kernel::queries {
 using namespace geometry_kernel::core;
 
 //---------------------------------------------------------------------------
-// Point-to-line queries
+// Point-to-line queries (2D)
 //---------------------------------------------------------------------------
 
 /**
@@ -43,10 +43,10 @@ using namespace geometry_kernel::core;
  *   a ---------- q ---------------- b -------->  direction = b - a
  *   t=0          t                  t=1
  *
- * @param point Point to project.
- * @param a First point defining the line.
- * @param b Second point defining the line.
- * @return Closest point on the infinite line to @p point: q = a + t * (b - a).
+ * @param point Point to project
+ * @param a First point defining the line
+ * @param b Second point defining the line
+ * @return Closest point on the infinite line to @p point: q = a + t * (b - a)
  *
  * @note If @p a and @p b are coincident (within tolerance), returns @p a.
  *       The result may lie outside segment [a,b]; use ClosestPointOnSegment
@@ -114,10 +114,10 @@ template <ScalarType T>
  *
  * result = b
  *
- * @param point Point to project.
- * @param a Segment start.
- * @param b Segment end.
- * @return Closest point on segment [a,b] to @p point (may be an endpoint).
+ * @param point Point to project
+ * @param a Segment start
+ * @param b Segment end
+ * @return Closest point on segment [a,b] to @p point (may be an endpoint)
  *
  * @note If @p a and @p b are coincident (within tolerance), returns @p a.
  */
@@ -161,7 +161,7 @@ template <ScalarType T>
 }
 
 //---------------------------------------------------------------------------
-// Point-to-triangle queries
+// Point-to-triangle queries (2D)
 //---------------------------------------------------------------------------
 
 /**
@@ -218,11 +218,11 @@ template <ScalarType T>
  *   Both edge (v1,v2) and edge (v2,v3) clamp their projection to v2,
  *   so either one yields the correct closest = v2.
  *
- * @param point Point to query.
- * @param v1 First vertex of the triangle.
- * @param v2 Second vertex of the triangle.
- * @param v3 Third vertex of the triangle.
- * @return Closest point on the triangle (interior or boundary) to @p point.
+ * @param point Point to query
+ * @param v1 First vertex of the triangle
+ * @param v2 Second vertex of the triangle
+ * @param v3 Third vertex of the triangle
+ * @return Closest point on the triangle (interior or boundary) to @p point
  *
  * @note Winding-order agnostic since PointInTriangle and ClosestPointOnSegment both are
  * (winding-order agnostic).
