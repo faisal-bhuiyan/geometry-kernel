@@ -12,12 +12,18 @@ include(GoogleTest)
 add_executable(geometry_kernel_unit_tests
     core/test_types.cpp
     core/test_tolerance.cpp
-    core/test_predicates.cpp
+    core/test_predicates2.cpp
+    core/test_predicates3.cpp
     core/test_area.cpp
-    core/test_point.cpp
-    core/test_vector.cpp
-    queries/test_closest_point.cpp
-    queries/test_containment.cpp
+    core/test_point2.cpp
+    core/test_point3.cpp
+    core/test_vector2.cpp
+    core/test_vector3.cpp
+    queries/test_closest_point2.cpp
+    queries/test_closest_point3.cpp
+    queries/test_containment2.cpp
+    queries/test_containment3.cpp
+    queries/test_intersection.cpp
     algorithms/test_polygon_mesh.cpp
     algorithms/test_ear_clipping.cpp
 )
