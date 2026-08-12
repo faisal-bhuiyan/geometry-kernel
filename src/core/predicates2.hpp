@@ -19,7 +19,7 @@ template <ScalarType T>
 [[nodiscard]] inline Orientation TriangleOrientation(
     const Point2<T>& a, const Point2<T>& b, const Point2<T>& c
 ) {
-    const auto winding = RobustSign(SignedTriangleArea2(a, b, c));
+    const auto winding = RobustSign(SignedTriangleAreaTimes2(a, b, c));
     if (winding > 0) {
         return Orientation::kCounterClockwise;
     }

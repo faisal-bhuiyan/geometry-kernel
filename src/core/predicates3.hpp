@@ -15,7 +15,7 @@ namespace geometry_kernel::core {
 /**
  * @brief Signed half-space test for edge (vi, vj), relative to @p point, oriented by @p normal.
  *
- * The 3D generalization of SignedTriangleArea2's sign test. In 2D, the cross product of
+ * The 3D generalization of SignedTriangleAreaTimes2's sign test. In 2D, the cross product of
  * an edge and a point-relative vector is itself a scalar with a usable sign. In 3D,
  * Cross(vj - vi, point - vi) is a full vector -> perpendicular to both the edge and
  * (point - vi) -> so it has no sign on its own. Dotting it with the face @p normal
@@ -62,10 +62,10 @@ namespace geometry_kernel::core {
  * @param vj Edge end vertex
  * @param point Point to test
  * @param normal Face normal orienting the half-space test (need not be unit length --
- *        only its sign/direction matters, not its magnitude).
- * @return Signed scalar; sign indicates which side of the edge (as seen from normal)
+ *        only its sign/direction matters, NOT its magnitude)
+ * @return Signed scalar -> sign indicates which side of the edge (as seen from normal)
  *         point falls on. Magnitude is not independently meaningful (unlike
- *         SignedTriangleArea2, this is not twice a triangle area -- it is scaled by
+ *         SignedTriangleAreaTimes2, this is not twice a triangle area -> it is scaled by
  *         |normal| and is only useful through RobustSign()).
  */
 template <ScalarType T>

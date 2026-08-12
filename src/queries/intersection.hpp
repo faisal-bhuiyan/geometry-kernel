@@ -44,7 +44,7 @@ using namespace geometry_kernel::core;
  * @return True if @p point's coordinates lie within the padded AABB of [a,b].
  *
  * @pre @p point is already known to be collinear with @p a and @p b (e.g. via a prior
- *      RobustSign(SignedTriangleArea2(a, b, point)) == 0 check). This function only
+ *      RobustSign(SignedTriangleAreaTimes2(a, b, point)) == 0 check). This function only
  *      performs the bounding-box containment check; it does not re-verify collinearity,
  *      since every call site in this file has already established it.
  */
@@ -126,10 +126,10 @@ template <ScalarType T>
     const Point2<T>& a, const Point2<T>& b, const Point2<T>& c, const Point2<T>& d
 ) {
     // Orientations of each endpoint relative to the other segment's supporting line
-    const int ab_c{RobustSign(SignedTriangleArea2(a, b, c))};
-    const int ab_d{RobustSign(SignedTriangleArea2(a, b, d))};
-    const int cd_a{RobustSign(SignedTriangleArea2(c, d, a))};
-    const int cd_b{RobustSign(SignedTriangleArea2(c, d, b))};
+    const int ab_c{RobustSign(SignedTriangleAreaTimes2(a, b, c))};
+    const int ab_d{RobustSign(SignedTriangleAreaTimes2(a, b, d))};
+    const int cd_a{RobustSign(SignedTriangleAreaTimes2(c, d, a))};
+    const int cd_b{RobustSign(SignedTriangleAreaTimes2(c, d, b))};
 
     // Case 1: proper crossing —> endpoints on strictly opposite sides of each line
     if (ab_c * ab_d < 0 && cd_a * cd_b < 0) {

@@ -24,7 +24,7 @@ using namespace geometry_kernel::core;
  *
  * The 3D counterpart to PointInTriangle: runs the same three-edge sign-agreement test,
  * using EdgeSign3 (a half-space test oriented by @p normal) in place of
- * SignedTriangleArea2. Because EdgeSign3 only reads point's in-plane position (see its
+ * SignedTriangleAreaTimes2. Because EdgeSign3 only reads point's in-plane position (see its
  * doc comment), @p point need not actually lie in the triangle's plane -- this tests
  * whether its perpendicular projection onto that plane would fall inside the triangle.
  *

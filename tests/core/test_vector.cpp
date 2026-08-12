@@ -259,10 +259,10 @@ TEST(Properties, PerpendicularConstructionHasZeroDot) {
     EXPECT_DOUBLE_EQ(Dot(v, perp), 0.);
 }
 
-TEST(Properties, SignedTriangleArea2MatchesCrossOfEdgeVectors) {
-    // SignedTriangleArea2 is implemented as Cross(b - a, c - a)
+TEST(Properties, SignedTriangleAreaTimes2MatchesCrossOfEdgeVectors) {
+    // SignedTriangleAreaTimes2 is implemented as Cross(b - a, c - a)
     const Point2D a{0., 0.}, b{3., 0.}, c{1., 2.};
-    EXPECT_DOUBLE_EQ(SignedTriangleArea2(a, b, c), Cross(b - a, c - a));
+    EXPECT_DOUBLE_EQ(SignedTriangleAreaTimes2(a, b, c), Cross(b - a, c - a));
 }
 
 TEST(Properties, NormalizedLengthIsOneWhenNonZero) {

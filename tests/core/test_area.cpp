@@ -148,7 +148,7 @@ TEST(Properties, IsLeftTurnConsistentWithTriangleOrientation) {
 
 TEST(Properties, SignedArea2AntisymmetryUnderVertexSwap) {
     const Point2D a{0., 0.}, b{3., 0.}, c{1., 2.};
-    EXPECT_DOUBLE_EQ(SignedTriangleArea2(a, b, c), -SignedTriangleArea2(a, c, b));
+    EXPECT_DOUBLE_EQ(SignedTriangleAreaTimes2(a, b, c), -SignedTriangleAreaTimes2(a, c, b));
 }
 
 TEST(Properties, CentroidOfAnyCCWTriangleIsContained) {

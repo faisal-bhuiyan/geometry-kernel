@@ -69,9 +69,9 @@ template <ScalarType T>
 [[nodiscard]] inline bool PointInTriangle(
     const Point2<T>& point, const Point2<T>& v1, const Point2<T>& v2, const Point2<T>& v3
 ) {
-    const int s1{RobustSign(SignedTriangleArea2(v1, v2, point))};
-    const int s2{RobustSign(SignedTriangleArea2(v2, v3, point))};
-    const int s3{RobustSign(SignedTriangleArea2(v3, v1, point))};
+    const int s1{RobustSign(SignedTriangleAreaTimes2(v1, v2, point))};
+    const int s2{RobustSign(SignedTriangleAreaTimes2(v2, v3, point))};
+    const int s3{RobustSign(SignedTriangleAreaTimes2(v3, v1, point))};
 
     const bool has_negative{(s1 < 0) || (s2 < 0) || (s3 < 0)};
     const bool has_positive{(s1 > 0) || (s2 > 0) || (s3 > 0)};
@@ -147,7 +147,8 @@ template <ScalarType T>
     for (std::size_t i = 0; i < num_vertices; ++i) {
         const Point2<T>& v0{polygon[i]};
         const Point2<T>& v1{polygon[(i + 1) % num_vertices]};
-        if (RobustSign(SignedTriangleArea2(v0, v1, point)) == 0 && PointOnSegment(point, v0, v1)) {
+        if (RobustSign(SignedTriangleAreaTimes2(v0, v1, point)) == 0 &&
+            PointOnSegment(point, v0, v1)) {
             return true;
         }
     }
