@@ -1,3 +1,6 @@
+#include <span>
+#include <vector>
+
 #include <gtest/gtest.h>
 
 #include "core/point2.hpp"
@@ -140,6 +143,89 @@ TEST(PointInTriangle, DegeneratekCollinearShape_PointOffLine) {
     EXPECT_FALSE(
         PointInTriangle(Point2D{1., 1.}, Point2D{0., 0.}, Point2D{2., 0.}, Point2D{4., 0.})
     );
+}
+
+//------------------------------------------------------------------------------
+// PointInPolygon — interior / exterior
+//------------------------------------------------------------------------------
+
+TEST(PointInPolygon, SquareInterior) {
+    EXPECT_TRUE(PointInPolygon(Point2D{0.5, 0.5}, kCcwSquare));
+}
+
+TEST(PointInPolygon, SquareExterior) {
+    EXPECT_FALSE(PointInPolygon(Point2D{2., 2.}, kCcwSquare));
+    EXPECT_FALSE(PointInPolygon(Point2D{-0.1, 0.5}, kCcwSquare));
+}
+
+TEST(PointInPolygon, LShapeInterior) {
+    // Interior of the vertical arm and of the horizontal arm
+    EXPECT_TRUE(PointInPolygon(Point2D{0.5, 1.5}, kCcwLShape));
+    EXPECT_TRUE(PointInPolygon(Point2D{1.5, 0.5}, kCcwLShape));
+}
+
+TEST(PointInPolygon, LShapeExteriorInConcavePocket) {
+    // Outside the L, in the missing upper-right quadrant
+    EXPECT_FALSE(PointInPolygon(Point2D{1.5, 1.5}, kCcwLShape));
+}
+
+//------------------------------------------------------------------------------
+// PointInPolygon — boundary
+//------------------------------------------------------------------------------
+
+TEST(PointInPolygon, OnEdge) {
+    // Midpoint of bottom edge of the square
+    EXPECT_TRUE(PointInPolygon(Point2D{0.5, 0.}, kCcwSquare));
+}
+
+TEST(PointInPolygon, OnVertex) {
+    EXPECT_TRUE(PointInPolygon(kCcwSquare[0], kCcwSquare));
+}
+
+//------------------------------------------------------------------------------
+// PointInPolygon — concave pocket (M-shape)
+//------------------------------------------------------------------------------
+
+TEST(PointInPolygon, MShapeConcavePocketInterior) {
+    // Below the reflex vertex v4(2,1), inside the polygon body under the notch
+    EXPECT_TRUE(PointInPolygon(Point2D{2., 0.5}, kCcwMShape));
+}
+
+TEST(PointInPolygon, MShapeOutside) {
+    EXPECT_FALSE(PointInPolygon(Point2D{2., -1.}, kCcwMShape));
+}
+
+//------------------------------------------------------------------------------
+// PointInPolygon — degenerate / overload / winding
+//------------------------------------------------------------------------------
+
+TEST(PointInPolygon, FewerThanThreeVerticesReturnsFalse) {
+    const std::vector<Point2D> empty{};
+    const std::vector<Point2D> one{Point2D{0., 0.}};
+    const std::vector<Point2D> two{Point2D{0., 0.}, Point2D{1., 0.}};
+    EXPECT_FALSE(PointInPolygon(Point2D{0., 0.}, empty));
+    EXPECT_FALSE(PointInPolygon(Point2D{0., 0.}, one));
+    EXPECT_FALSE(PointInPolygon(Point2D{0., 0.}, two));
+}
+
+TEST(PointInPolygon, SpanAndVectorOverloadsAgree) {
+    const Point2D p{0.5, 0.5};
+    const bool via_vector = PointInPolygon(p, kCcwSquare);
+    const bool via_span = PointInPolygon(p, std::span<const Point2D>{kCcwSquare});
+    EXPECT_EQ(via_vector, via_span);
+}
+
+TEST(PointInPolygon, SameResultForCCWAndCW) {
+    const Point2D inside{0.5, 0.5};
+    const Point2D outside{2., 2.};
+    EXPECT_EQ(PointInPolygon(inside, kCcwSquare), PointInPolygon(inside, kCwSquare));
+    EXPECT_EQ(PointInPolygon(outside, kCcwSquare), PointInPolygon(outside, kCwSquare));
+}
+
+TEST(PointInPolygon, SimpleConcavePolygon) {
+    // Centroid-ish interior of the fixture polygon
+    EXPECT_TRUE(PointInPolygon(Point2D{0.5, 0.3}, kSimpleConcavePolygon));
+    EXPECT_FALSE(PointInPolygon(Point2D{0.5, 0.9}, kSimpleConcavePolygon));
 }
 
 }  // namespace geometry_kernel::test
