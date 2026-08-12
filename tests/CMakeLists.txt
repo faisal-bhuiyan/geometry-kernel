@@ -18,6 +18,8 @@ add_executable(geometry_kernel_unit_tests
     core/test_vector.cpp
     queries/test_closest_point.cpp
     queries/test_containment.cpp
+    algorithms/test_polygon_mesh.cpp
+    algorithms/test_ear_clipping.cpp
 )
 target_link_libraries(geometry_kernel_unit_tests PRIVATE GTest::gtest_main geometry_kernel)
 target_include_directories(geometry_kernel_unit_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
