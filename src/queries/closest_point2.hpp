@@ -89,34 +89,34 @@ template <ScalarType T>
  *
  * Case 1: foot lands inside [a, b] -> no clamping needed
  *
- *     point
- *       *
- *       |
- *       v
- * a-----q-----b---->  direction = b - a
- * t=0   t     t=1
+ *        point
+ *          *
+ *          |
+ *          v
+ *    a-----q-----b---->  direction = b - a
+ *    t=0   t     t=1
  *
  * result = q = a + t * (b - a)
  *
  * Case 2: unclamped t < 0 (foot falls before a) -> clamped to a
  *
- *    point
- *      *
- *      |
- *      v
- * - - -q- - -a-----b---->  direction = b - a
- *      t<0   t=0   t=1
+ *       point
+ *         *
+ *         |
+ *         v
+ *    - - -q- - -a-----b---->  direction = b - a
+ *        t<0   t=0   t=1
  *
  * result = a
  *
  * Case 3: unclamped t > 1 (foot falls beyond b) -> clamped to b
  *
- *           point
- *             *
- *             |
- *             v
- * a-----b- - -q---->  direction = b - a
- * t=0   t=1   t>1
+ *              point
+ *                *
+ *                |
+ *                v
+ *    a-----b- - -q---->  direction = b - a
+ *    t=0   t=1   t>1
  *
  * result = b
  *

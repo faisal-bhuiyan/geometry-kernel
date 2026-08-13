@@ -29,6 +29,8 @@ using namespace geometry_kernel::core;
  * Winding-order agnostic -> works for both CCW and CW triangles.
  * Boundary-inclusive -> points exactly on an edge or vertex return true.
  *
+ * --------------------------------------------------------------------------------------
+ *
  * Case 1: point strictly inside -> true (all three signs agree)
  *
  *          v3
@@ -59,6 +61,8 @@ using namespace geometry_kernel::core;
  *     v1        v2
  *           *
  *
+ * --------------------------------------------------------------------------------------
+ *
  * @param point Point to test.
  * @param v1 First vertex of the triangle.
  * @param v2 Second vertex of the triangle.
@@ -84,6 +88,8 @@ template <ScalarType T>
 
 /**
  * @brief Tests if a point lies inside or on the boundary of a simple polygon.
+ *
+ * --------------------------------------------------------------------------------------
  *
  * Two-phase algorithm:
  *
@@ -125,6 +131,8 @@ template <ScalarType T>
  *      |  *   v3----v2      * inside the concave pocket:
  *      |               \     ray crosses one edge -> odd -> inside
  *     v0----------------v1
+ *
+ * --------------------------------------------------------------------------------------
  *
  * @param point Point to test.
  * @param polygon Vertices of a simple polygon as an open ring (last vertex does

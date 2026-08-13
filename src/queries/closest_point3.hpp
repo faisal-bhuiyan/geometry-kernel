@@ -142,10 +142,10 @@ template <ScalarType T>
     const Vector3<T> normal{Cross(v2 - v1, v3 - v1)};
 
     if (InPlaneTriangleContainment(point, v1, v2, v3, normal)) {
-        // Project point onto the triangle's plane along the normal:
-        //   t = Dot(point - v1, normal) / LengthSquared(normal)
-        // gives the signed distance (in units of |normal|) from the plane; subtracting
-        // t * normal from point removes exactly the out-of-plane component.
+        // Project point onto the triangle's plane along the normal
+        // t = Dot(point - v1, normal) / LengthSquared(normal)
+        // gives the signed distance (in units of |normal|) from the plane -> subtracting
+        // t * normal from point removes exactly the out-of-plane component
         const T t{Dot(point - v1, normal) / LengthSquared(normal)};
         return point + normal * (-t);
     }

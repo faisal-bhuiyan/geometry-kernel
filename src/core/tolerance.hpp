@@ -13,7 +13,7 @@ constexpr T kTolerance{static_cast<T>(1e-9)};
  *
  * Classifies a value as positive (+1), negative (-1), or zero (0) with tolerance
  * to avoid spurious results from floating-point error. Values inside the "dead zone"
- * zone [-tolerance, +tolerance] snap to zero.
+ * [-tolerance, +tolerance] snap to zero.
  *
  *              -1                    0                   +1
  *

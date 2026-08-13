@@ -22,6 +22,8 @@ using namespace geometry_kernel::core;
  * that @p point falls inside the axis-aligned bounding box of [a,b], expanded by
  * kTolerance (so endpoints and near-endpoint floating-point noise still pass).
  *
+ * --------------------------------------------------------------------------------------
+ *
  * Case 1: point between a and b -> true
  *
  *     a-----*-----b
@@ -37,6 +39,8 @@ using namespace geometry_kernel::core;
  *     * - - a-----b
  *   point
  *   (on the infinite line through a,b, but outside the segment extent)
+ *
+ * --------------------------------------------------------------------------------------
  *
  * @param point Query point (must already be collinear with a and b).
  * @param a Segment start.
@@ -74,6 +78,8 @@ template <ScalarType T>
  * 2. Collinear / touching: an endpoint has sign zero relative to the other
  *    segment's line -> fall back to PointOnSegment to confirm it lies within
  *    that segment's extent, not just on its infinite line.
+ *
+ * --------------------------------------------------------------------------------------
  *
  * Case 1: proper crossing -> true
  *
@@ -114,6 +120,8 @@ template <ScalarType T>
  *    a-----b
  *
  *    (c and d are both above ab, so ab_c * ab_d > 0; segments do not cross)
+ *
+ * --------------------------------------------------------------------------------------
  *
  * @param a First segment start.
  * @param b First segment end.
