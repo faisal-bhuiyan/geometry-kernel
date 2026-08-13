@@ -25,6 +25,8 @@ using Vector2D = Vector2<double>;
 /**
  * @brief Computes the dot product (scalar product) of two vectors.
  *
+ * --------------------------------------------------------------------------------------
+ *
  * Projection view -> drop a perpendicular from the tip of v1 onto the line of v2.
  *
  *               * v1
@@ -49,6 +51,8 @@ using Vector2D = Vector2<double>;
  *      Dot > 0             Dot = 0             Dot < 0
  *      acute               perpendicular       obtuse
  *
+ * --------------------------------------------------------------------------------------
+ *
  * Note that callers rarely want the angle itself. The projection parameter used
  * throughout the queries layer divides by the target's own squared length
  *
@@ -56,6 +60,8 @@ using Vector2D = Vector2<double>;
  *
  * which is precisely how ClosestPointOnLine and ClosestPointOnSegment locate the
  * perpendicular foot without ever computing a cosine or a square root.
+ *
+ * --------------------------------------------------------------------------------------
  *
  * @param v1 First vector to compute the dot product with
  * @param v2 Second vector to compute the dot product with
@@ -70,6 +76,8 @@ template <ScalarType T>
 
 /**
  * @brief Computes the "2D" cross product (vector product) of two vectors.
+ *
+ * --------------------------------------------------------------------------------------
  *
  * Not a vector, but the scalar z-component of the equivalent 3D cross product.
  * Magnitude gives the area of the parallelogram spanned by the two vectors;
@@ -93,15 +101,17 @@ template <ScalarType T>
  *             \               \
  *              *---------------* v1 + v2
  *
- * Why the expression measures that area: rotating v1 by 90° CCW gives
- * perp(v1) = (-v1.y, v1.x), and Dot(perp(v1), v2) = v1.x * v2.y - v1.y * v2.x,
- * which is the definition below. So the cross product is |v1| times the
- * component of v2 perpendicular to v1 -> base × height -> area of the parallelogram.
+ * --------------------------------------------------------------------------------------
  *
- *     v1 × v2 = |v1| |v2| sin θ
+ * ** WHY CROSS PRODUCT EXPRESSION MEASURES THE AREA? **
  *
- * Reading it as a dot against perp(v1) also explains the sign: it is positive
- * exactly when v2 leans towards the CCW-rotated v1, i.e. lies to its left.
+ * - Rotating v1 by 90° CCW gives the perpendicular vector
+ *      perp(v1) = (-v1.y, v1.x), and Dot(perp(v1), v2) = v1.x * v2.y - v1.y * v2.x,
+ *   which is the definition of the cross product.
+ * - So the cross product is |v1| times the component of v2 perpendicular to v1 ->
+ *   base × height -> area of the parallelogram.
+ *
+ * --------------------------------------------------------------------------------------
  *
  * @param v1 First vector to compute the cross product with
  * @param v2 Second vector to compute the cross product with

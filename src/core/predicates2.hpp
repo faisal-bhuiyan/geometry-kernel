@@ -19,6 +19,8 @@ namespace geometry_kernel::core {
  * The doubled signed area is positive exactly when the walk a -> b -> c turns
  * counter-clockwise, so an area computation doubles as a winding test.
  *
+ * --------------------------------------------------------------------------------------
+ *
  * Case 1: CCW -> kCounterClockwise
  *
  *               c
@@ -50,6 +52,8 @@ namespace geometry_kernel::core {
  *
  *         no enclosed area -> no winding to report
  *
+ * --------------------------------------------------------------------------------------
+ *
  * The same predicate read as a side-of-line test: the cases differ only in
  * which side of the directed line a -> b the third point falls on.
  *
@@ -65,6 +69,8 @@ namespace geometry_kernel::core {
  * Two invariants follow from the underlying determinant:
  * - Cyclic rotation preserves it: (a, b, c), (b, c, a), (c, a, b) all agree.
  * - Any single swap reverses it:  (a, b, c) and (a, c, b) always disagree.
+ *
+ * --------------------------------------------------------------------------------------
  *
  * @param a First point of the ordered triple.
  * @param b Second point of the ordered triple.
@@ -96,9 +102,12 @@ template <ScalarType T>
  * @brief Returns true if previous -> current -> next makes a strict left turn
  *        (i.e. positive cross product / CCW orientation).
  *
+ * --------------------------------------------------------------------------------------
  * A left turn at current means next lies strictly to the left of the directed
  * line previous -> current. It is TriangleOrientation phrased as a walk along a
  * path rather than as a triangle's winding.
+ *
+ * --------------------------------------------------------------------------------------
  *
  * Case 1: left turn -> true
  *
@@ -126,17 +135,24 @@ template <ScalarType T>
  *
  *      swinging CW at curr
  *
- * Why the winding of the input polygon matters: in a CCW-wound polygon the
- * interior lies to the left of every directed edge, so "left turn at current"
- * is exactly "the interior angle at current is below 180 deg" -- that is,
- * current is a convex vertex. Hand it CW input and every answer inverts:
- * convex corners report false and reflex corners report true. That is why
+ * --------------------------------------------------------------------------------------
+ * ** WHY THE WINDING OF THE INPUT POLYGON MATTERS? **
+ *
+ * In a CCW-wound polygon the interior lies to the left of every directed edge, so
+ * "left turn at current" interior lies to the left of every directed edge -> "left
+ * turn at current" is exactly  "the interior angle at current is below 180 deg" ->
+ * current is a convex vertex.
+ *
+ * If a CW input is provided then the answer inverts -> convex corners report
+ * false and reflex corners report true. This inversion is why
  * TriangulatePolygonWithEarClipping reverses CW input before constructing its
  * PolygonMesh, whose IsConvexVertex is this function's only caller.
  *
- * Strictness matters for the same consumer: collinear corners are never
+ * Strictness matters for the same consumer -> collinear corners are never
  * classified convex, so they are never clipped as ears and no zero-area
  * triangle reaches the output.
+ *
+ * --------------------------------------------------------------------------------------
  *
  * @param previous Previous vertex on the path.
  * @param current Current vertex (the corner being tested).

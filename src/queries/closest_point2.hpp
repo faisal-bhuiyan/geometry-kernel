@@ -21,11 +21,13 @@ using namespace geometry_kernel::core;
 /**
  * @brief Projects a point onto the infinite line through @p a and @p b.
  *
+ * --------------------------------------------------------------------------------------
+ *
  * Parametrize the line as q(t) = a + t * (b - a). The closest point is the
  * foot of the perpendicular from @p point, found by requiring the
  * displacement (point - q(t)) to be orthogonal to the line's direction:
  *
- *     (point - a - t * direction) · direction = 0
+ *     (point - a - t * direction) ⋅ direction = 0
  *
  * Solving for t:
  *
@@ -42,6 +44,8 @@ using namespace geometry_kernel::core;
  *                v
  *   a ---------- q ---------------- b -------->  direction = b - a
  *   t=0          t                  t=1
+ *
+ * --------------------------------------------------------------------------------------
  *
  * @param point Point to project
  * @param a First point defining the line
@@ -81,6 +85,8 @@ template <ScalarType T>
  * When the unclamped t falls outside [0, 1], the perpendicular foot lies
  * beyond an endpoint, and the nearer endpoint becomes the answer instead.
  *
+ * --------------------------------------------------------------------------------------
+ *
  * Case 1: foot lands inside [a, b] -> no clamping needed
  *
  *     point
@@ -113,6 +119,8 @@ template <ScalarType T>
  * t=0   t=1   t>1
  *
  * result = b
+ *
+ * --------------------------------------------------------------------------------------
  *
  * @param point Point to project
  * @param a Segment start
@@ -167,6 +175,8 @@ template <ScalarType T>
 /**
  * @brief Closest point on the filled triangle (v1, v2, v3) to @p point.
  *
+ * --------------------------------------------------------------------------------------
+ *
  * Algorithm (O(1), no per-vertex Voronoi-region logic needed):
  *
  * 1. A triangle is convex. If @p point lies inside or on its boundary,
@@ -183,6 +193,8 @@ template <ScalarType T>
  * vertex" case correctly without extra logic: when @p point is nearest to a
  * shared vertex (e.g. v2), both adjacent edges (v1,v2) and (v2,v3) clamp their
  * own projection to v2, so the minimum-of-three naturally converges there.
+ *
+ * --------------------------------------------------------------------------------------
  *
  * Case 1: point inside the triangle -> return point itself
  *
@@ -218,6 +230,8 @@ template <ScalarType T>
  *   Both edge (v1,v2) and edge (v2,v3) clamp their projection to v2,
  *   so either one yields the correct closest = v2.
  *
+ * --------------------------------------------------------------------------------------
+ *
  * @param point Point to query
  * @param v1 First vertex of the triangle
  * @param v2 Second vertex of the triangle
@@ -226,7 +240,9 @@ template <ScalarType T>
  *
  * @note Winding-order agnostic since PointInTriangle and ClosestPointOnSegment both are
  * (winding-order agnostic).
+ *
  * @see Ericson, C. Real-Time Collision Detection. Morgan Kaufmann, 2005, §5.1.
+ * @see https://www.geometrictools.com/Documentation/DistancePoint3Triangle3.pdf
  */
 template <ScalarType T>
 [[nodiscard]] inline Point2<T> ClosestPointOnTriangle(

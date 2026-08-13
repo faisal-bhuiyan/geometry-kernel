@@ -69,6 +69,8 @@ template <ScalarType T>
 /**
  * @brief Closest point on the filled triangle (v1, v2, v3) to @p point, in 3D.
  *
+ * --------------------------------------------------------------------------------------
+ *
  * Unlike the 2D version, @p point generally does not lie in the triangle's plane, so
  * "inside the triangle" first means "does point's perpendicular projection onto the
  * triangle's plane fall inside the triangle" (InPlaneTriangleContainment). If so, that
@@ -83,6 +85,8 @@ template <ScalarType T>
  * containment test that chooses the branch. The side view cannot decide it on its own,
  * since landing within the triangle's silhouette in one direction does not put you
  * inside the triangle.
+ *
+ * --------------------------------------------------------------------------------------
  *
  * Case 1: the foot lands inside the triangle -> the foot is the answer
  *
@@ -119,6 +123,8 @@ template <ScalarType T>
  * (point - f) runs along the normal, which is perpendicular to every in-plane edge
  * direction, so it contributes nothing to the projection parameter along an edge. That
  * is why the outside branch never needs to compute f at all.
+ *
+ * --------------------------------------------------------------------------------------
  *
  * @param point Point to query
  * @param v1 First vertex of the triangle

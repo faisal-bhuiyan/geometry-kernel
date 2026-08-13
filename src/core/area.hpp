@@ -18,14 +18,18 @@ namespace geometry_kernel::core {
  *
  * Equals twice the signed area of triangle (a, b, c), or equivalently the
  * signed area of the parallelogram spanned by u = (b - a) and v = (c - a).
- * In 2D the cross product is the scalar:
+ * In 2D the cross product is the following scalar.
  *
  *     u × v = u.x * v.y - u.y * v.x
  *
- * Why that scalar is an area: rotating u by 90° CCW gives perp(u) = (-u.y, u.x),
- * and Dot(perp(u), v) = u.x * v.y - u.y * v.x = u × v. So the cross product is
- * |u| times the component of v perpendicular to u -> base × height =
- * area of the parallelogram spanned by u and v.
+ * --------------------------------------------------------------------------------------
+ * ** WHY THE MAGNITUDE OF CROSS PRODUCT IS AN AREA? **
+ *
+ * - Rotating u by 90° CCW gives perp(u) = (-u.y, u.x) -> a vector perpendicular to u.
+ * - Dot(perp(u), v) = u.x * v.y - u.y * v.x = u × v -> same as the cross product.
+ * - Therefore, the cross product is |u| times the component of v perpendicular to
+ *   u -> base × height = area of the parallelogram spanned by u and v.
+ *
  *
  *         c *---------------* c + u
  *          /:              /
@@ -38,9 +42,12 @@ namespace geometry_kernel::core {
  *
  *     u × v = |u| · h = |u| |v| sin θ = parallelogram area
  *
- * Why "times 2": the diagonal b–c cuts that parallelogram into two congruent
- * triangles -> a 180° rotation about the midpoint of bc maps T1 onto T2 -> and
- * T1 is exactly triangle (a, b, c):
+ * --------------------------------------------------------------------------------------
+ * ** WHY  MAGNITUDE OF CROSS PRODUCT IS TWICE THE AREA OF A TRIANGLE? **
+ *
+ * The diagonal b–c cuts that parallelogram into two congruent triangles ->
+ * a 180° rotation about the midpoint of bc maps T1 onto T2 -> and T1 is
+ * exactly triangle (a, b, c).
  *
  *         c *---------------* c + u
  *          /    ·    T2    /
@@ -50,14 +57,16 @@ namespace geometry_kernel::core {
  *
  *     u × v = 2 × area of triangle (a, b, c)
  *
+ * --------------------------------------------------------------------------------------
+ *
  * Sign follows the right-hand rule: positive when v is CCW from u (c lies left
  * of the directed line a -> b), negative when CW, and exactly zero when a, b, c
  * are collinear -> the degenerate parallelogram has no area.
  *
- * @param a First vertex.
- * @param b Second vertex.
- * @param c Third vertex.
- * @return Signed parallelogram area in the xy-plane (twice the signed triangle area).
+ * @param a First vertex
+ * @param b Second vertex
+ * @param c Third vertex
+ * @return Signed parallelogram area in the xy-plane (twice the signed triangle area)
  *
  * @see https://en.wikipedia.org/wiki/Cross_product#Computational_geometry
  */
@@ -81,32 +90,41 @@ template <ScalarType T>
 /**
  * @brief Computes the signed area of a simple polygon using the shoelace formula.
  *
- * Each term of the sum is p0.x * p1.y - p1.x * p0.y = Cross(p0, p1), which is
- * SignedTriangleAreaTimes2 evaluated with the origin as the first vertex:
+ * --------------------------------------------------------------------------------------
+ * Each term of the sum is p0.x * p1.y - p1.x * p0.y = Cross(p0, p1) -> that is
+ * SignedTriangleAreaTimes2 evaluated with the origin as the first vertex.
  *
  *     Cross(vi, vi+1) = SignedTriangleAreaTimes2(O, vi, vi+1)
  *
  * So the shoelace sum is a fan of triangles from the origin O out to every edge,
  * each counted as twice its signed area -> which is what the trailing 0.5
- * factor undoes. The fan is correct even when O lies outside the polygon,
- * because the surplus region is swept once with each sign:
+ * factor undoes. The fan is correct even when O lies outside the polygon.
  *
- *        v4 *-------------* v3
- *           |             |
- *           |   polygon   |
- *        v1 *-------------* v2
- *            \  ·       · /
- *             \  ·     · /     edge (v1,v2) winds CW about O  -> negative
- *              \  ·   · /      edge (v3,v4) winds CCW about O -> positive
- *               \  · · /
- *                \ · ·/
+ *        v4 *-------------* v3      Cross(v1,v2) = -2   bottom edge runs CW
+ *           |             |                             about O
+ *           |   polygon   |         Cross(v2,v3) = +2
+ *        v1 *-------------* v2      Cross(v3,v4) = +6   top edge runs CCW
+ *            \           /                              about O
+ *             \(O,v1,v2)/           Cross(v4,v1) = +2
+ *              \  < 0  /
+ *               \     /                      sum = +8  ->  area = 4
+ *                \   /
+ *                 \ /
  *                  O
  *
- * The strip between O and the polygon is covered twice with opposite signs and
- * cancels exactly, leaving the polygon's own area. Edges that are collinear
- * with O contribute zero.
+ * Taking v1=(-1,1), v2=(1,1), v3=(1,3), v4=(-1,3) with O at the origin gives the
+ * terms above, and the 2x2 square does have area 4 -> even though the triangle
+ * (O,v1,v2) drawn here lies entirely outside the polygon and contributes a
+ * negative term.
  *
- * Reversing traversal negates every term, so the total sign encodes winding:
+ * That negative term cancels out. Summing signed coverage at any point gives the
+ * polygon's winding number about it -> one inside, zero outside. Every point of
+ * (O,v1,v2), for example, also lies in exactly one positive triangle. Only the
+ * interior contributes, so O can sit anywhere. Edges collinear with O drop out.
+ *
+ * --------------------------------------------------------------------------------------
+ *
+ * Reversing traversal negates every term, so the total sign encodes the winding number.
  *
  *   v1 -> v2 -> v3 -> v4 (CCW)         v4 -> v3 -> v2 -> v1 (CW)
  *
@@ -119,6 +137,8 @@ template <ScalarType T>
  * - Positive -> counter-clockwise (CCW) order
  * - Negative -> clockwise (CW) order
  * - Zero     -> degenerate (fewer than 3 vertices, or all points collinear)
+ *
+ * --------------------------------------------------------------------------------------
  *
  * @param polygon Vertices of the polygon as an open ring (last vertex does not repeat first).
  * @return Signed area -> absolute value equals the geometric area of the polygon.
