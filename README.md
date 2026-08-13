@@ -136,16 +136,16 @@ src/
     predicates3.hpp        3D predicates: EdgeSign3
     area.hpp               TriangleArea, SignedPolygonArea, PolygonArea
   queries/
-    closest_point2.hpp      ClosestPointOnSegment2<T>, ClosestPointOnLine2<T>, ClosestPointOnPlane2<T>
-    closest_point3.hpp      3D counterparts of closest_point2.hpp
-    containment2.hpp        2D containment predicates: PointInTriangle<T>, PointInPolygon<T>, InPlaneTriangleContainment<T>
-    containment3.hpp        3D counterparts of containment2.hpp
-    intersection.hpp        2D intersection predicates: SegmentsIntersect, PointOnSegment
+    closest_point2.hpp     ClosestPointOnSegment2<T>, ClosestPointOnLine2<T>, ClosestPointOnPlane2<T>
+    closest_point3.hpp     3D counterparts of closest_point2.hpp
+    containment2.hpp       2D containment predicates: PointInTriangle<T>, PointInPolygon<T>, InPlaneTriangleContainment<T>
+    containment3.hpp       3D counterparts of containment2.hpp
+    intersection.hpp       2D intersection predicates: SegmentsIntersect, PointOnSegment
   algorithms/
-    polygon_mesh.hpp        2D polygon mesh data structure: PolygonMesh<T> — boundary/reflex/ear linked lists
-    ear_clipping.hpp        2D ear-clipping triangulation: TriangulatePolygonWithEarClipping<T>, TriangulationResult<T>
+    polygon_mesh.hpp       2D polygon mesh data structure: PolygonMesh<T> — boundary/reflex/ear linked lists
+    ear_clipping.hpp       2D ear-clipping triangulation: TriangulatePolygonWithEarClipping<T>, TriangulationResult<T>
 tests/
-  core/           per-file unit tests + test_fixtures.hpp (shared polygon fixtures)
-  queries/        per-file unit tests
-  algorithms/     test_polygon_mesh.cpp (structural invariants), test_ear_clipping.cpp (end-to-end)
+  core/                    per-file unit tests + test_fixtures.hpp (shared polygon fixtures)
+  queries/                 per-file unit tests
+  algorithms/              test_polygon_mesh.cpp (structural invariants), test_ear_clipping.cpp (end-to-end)
 ```
