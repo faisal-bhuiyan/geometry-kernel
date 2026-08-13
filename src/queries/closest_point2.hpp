@@ -226,6 +226,7 @@ template <ScalarType T>
  *
  * @note Winding-order agnostic since PointInTriangle and ClosestPointOnSegment both are
  * (winding-order agnostic).
+ * @see Ericson, C. Real-Time Collision Detection. Morgan Kaufmann, 2005, §5.1.
  */
 template <ScalarType T>
 [[nodiscard]] inline Point2<T> ClosestPointOnTriangle(

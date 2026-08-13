@@ -78,6 +78,48 @@ template <ScalarType T>
  * ClosestPointOnSegment across the three edges, using the true 3D point (not the
  * projection).
  *
+ * Each case below is drawn twice: a side view with the plane seen edge-on, and a top
+ * view looking down the normal. The side view shows the drop; the top view shows the
+ * containment test that chooses the branch. The side view cannot decide it on its own,
+ * since landing within the triangle's silhouette in one direction does not put you
+ * inside the triangle.
+ *
+ * Case 1: the foot lands inside the triangle -> the foot is the answer
+ *
+ *   side view                                   top view (down the normal)
+ *
+ *                   * point                              * v3
+ *                   :                                   / \
+ *                   :  drop along the normal           /   \
+ *                   :                                 /     \
+ *                   v                                /   *   \
+ *   ---[============*============]---               /    f    \
+ *                   f                           v1 *-----------* v2
+ *
+ *   [===] = the triangle, seen edge-on            f is inside -> result = f
+ *
+ * Case 2: the foot lands outside -> clamp to the nearest edge
+ *
+ *   side view                                   top view (down the normal)
+ *
+ *                               * point                 * v3
+ *                               :                      / \
+ *                               :                     /   \
+ *                               :                    /     \
+ *                               v                   /       \
+ *   ---[=================]------*------          v1 *-----*-----* v2
+ *                       q       f                         q
+ *                                                         :
+ *   the drop overshoots the triangle                      * f
+ *
+ *                                                 f is outside -> result = q,
+ *                                                 the nearest point on edge v1-v2
+ *
+ * The fallback measures from the true 3D @p point rather than from f, but the two agree:
+ * (point - f) runs along the normal, which is perpendicular to every in-plane edge
+ * direction, so it contributes nothing to the projection parameter along an edge. That
+ * is why the outside branch never needs to compute f at all.
+ *
  * @param point Point to query
  * @param v1 First vertex of the triangle
  * @param v2 Second vertex of the triangle
@@ -85,6 +127,7 @@ template <ScalarType T>
  * @return Closest point on the triangle (interior or boundary) to @p point
  *
  * @note Winding-order agnostic, same as the 2D version.
+ * @see Ericson, C. Real-Time Collision Detection. Morgan Kaufmann, 2005, §5.1–5.4.
  */
 template <ScalarType T>
 [[nodiscard]] inline Point3<T> ClosestPointOnTriangle(
